@@ -1,0 +1,44 @@
+/*******************************/
+/* THEME - READTHEDOCS         */
+/*******************************/
+/* Force page content to full width */
+.wy-nav-content {
+    max-width: none;
+}
+
+/* Hide duplicate of section header in nav menu */
+li.toctree-l3:first-child {
+    display: none;
+}
+
+.section {
+    opacity: 1 !important;
+}
+
+
+/*******************************/
+/* THEME - MATERIAL            */
+/*******************************/
+@media only screen and (min-width: 76.25em) {
+    .md-main__inner {
+        max-width: none;
+    }
+    .md-sidebar--primary {
+        left: 0;
+    }
+    .md-sidebar--secondary {
+        right: 0;
+        margin-left: 0;
+        -webkit-transform: none;
+        transform: none;
+    }
+}
+
+.md-typeset code, .md-typeset pre {
+    /* color: #E74C3C; */
+    color: #7f3ce7;
+}
+
+/* .md-typeset table:not([class]) th {
+    background-color: #3a95f3;
+} */
