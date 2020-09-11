@@ -1,0 +1,18 @@
+/site
+
+# CICD generated files
+cicd/manifest.yaml
+cicd/docs/
+
+# VS Code
+.vscode
+
+# Logs
+*.log
+
+# Compressed content
+*.tar
+
+# Version file (used in CI)
+version
+

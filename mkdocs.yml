@@ -1,0 +1,111 @@
+site_name: Myrtea Documentations
+docs_dir: docs
+site_dir: site
+repo_url: https://github.com
+repo_name: Github
+edit_uri: /myrteametrics/myrtea-docs/edit/master/docs/
+
+plugins:
+  - search
+  - minify:
+      minify_html: true
+
+# https://squidfunk.github.io/mkdocs-material/getting-started/#configuration
+theme:
+  name: material
+  feature:
+    tabs: true
+  language: 'en'
+  # https://squidfunk.github.io/mkdocs-material/getting-started/#color-palette
+  palette:
+    primary: 'blue'
+    accent: 'blue'
+
+markdown_extensions:
+  - toc:
+      permalink: true
+  - tables
+  - admonition
+  - pymdownx.arithmatex
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_generator: !!python/name:pymdownx.emoji.to_svg
+  # - pymdownx.inlinehilite
+  - markdown.extensions.codehilite:
+      guess_lang: false
+      linenums: true
+  - pymdownx.magiclink
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.extra
+  - pymdownx.tilde
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_div_format
+
+extra_css:
+  - extra.css
+  # - https://unpkg.com/mermaid@7.1.2/dist/mermaid.css
+
+extra_javascript:
+  - mermaid.min.js
+  - extra.js
+  - 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'
+  # - https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js
+
+
+nav:
+  - Home: index.md
+  - Architecture: architecture/architecture.md
+  - Getting started:
+    - First application: getting-started/first-application.md
+    - Installation: getting-started/installation.md
+    - Model creation: getting-started/model-creation.md
+    - Data ingestion: getting-started/data-ingestion.md
+    - Facts creation: getting-started/facts-creation.md
+    - Situation creation: getting-started/situation-creation.md
+    - Business rules creation: getting-started/business-rules-creation.md
+  - Settings:
+    - Model: settings/model/model.md
+    - Fact: settings/fact/fact.md
+    - Situation: settings/situation/situation.md
+    - Business rule: settings/business-rule/business-rule.md
+    - Scheduler: settings/scheduler/scheduler.md
+    - Supported functions: settings/fact/supported-functions.md
+  - Technical:
+    - APIs:
+      - Ingester API: technical/ingester/ingester.md
+    - Postgres:
+      - Installation: technical/postgres/postgres.md
+  # - Connectors:
+  #   - SQL: technical/connectors/sql.md
+  #   - Kafka: technical/connectors/kafka.md
+  #   - Custom: technical/connectors/custom.md
+  - Security:
+    - General: security/general.md
+  # - Auth:
+  #   - Basic: security/auth/basic.md
+  #   - SAML: security/auth/saml.md
+  - Troubleshooting: troubleshooting/troubleshooting.md
+  # - Development Guide:
+  #   - Stack starting: development/stack-starting.md
+  #   - Angular development guide:
+  #     - Getting started: angular/getting-started.md
+  #     - Custom module: angular/custom-module.md
+  #     - Components:
+  #       - Shared components: angular/components/components.md
+  #       - Chart components: angular/components/chart-components.md
+  #       - List component: angular/components/list-component.md
+  #     - Services:
+  #       - Header service: angular/services/header-service.md
+  #       - Network service: angular/services/network-service.md
+  #       - Search service: angular/services/search-service.md
+  #       - Permission service : angular/services/permission-service.md
