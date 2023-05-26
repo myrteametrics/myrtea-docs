@@ -85,9 +85,9 @@ nav:
       - Ingester API: technical/ingester/ingester.md
     - Postgres:
       - Installation: technical/postgres/postgres.md
-  # - Connectors:
+   - Connectors:
   #   - SQL: technical/connectors/sql.md
-  #   - Kafka: technical/connectors/kafka.md
+     - Kafka: technical/connectors/kafka.md
   #   - Custom: technical/connectors/custom.md
   - Security:
     - General: security/general.md
