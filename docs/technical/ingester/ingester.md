@@ -8,7 +8,9 @@
 
 ## BulkIngestRequest structure
 
-```go tab="Go"
+=== "Go"
+
+```go
 type BulkIngestRequest struct {
     UUID         string     `json:"uuid"`
     DocumentType string     `json:"documentType"`
@@ -19,7 +21,9 @@ type BulkIngestRequest struct {
 
 ## Document structure
 
-```go tab="Go"
+=== "Go"
+
+```go
 type Document struct {
     ID        string      `json:"id"`
     Index     string      `json:"index"`
@@ -30,7 +34,9 @@ type Document struct {
 
 ## Merge config structure
 
-```go tab="Go"
+=== "Go"
+
+```go
 // Config wraps all rules for document merging
 type Config struct {
     Mode             Mode    `json:"mode"`
@@ -51,7 +57,9 @@ const (
 
 ## Merge config group structure
 
-```go tab="Go"
+=== "Go"
+
+```go
 // Group allows to group un set of merge fields and to define an optional condition to applay the merge fields
 type Group struct {
     Condition             string      `json:"condition,omitempty"`
@@ -74,7 +82,9 @@ type FieldMath struct {
 
 ### Ingest a new project
 
-```json tab="POST /api/v1/ingester/data"
+=== "POST /api/v1/ingester/data"
+
+```json
 {
     "uuid": 1,
     "document-type": "project",
@@ -94,7 +104,9 @@ type FieldMath struct {
 
 ### Update existing projects
 
-```json tab="POST /api/v1/ingester/data"
+=== "POST /api/v1/ingester/data"
+
+```json
 {
     "uuid": 2,
     "document-type": "project",
