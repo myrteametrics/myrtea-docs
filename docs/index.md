@@ -19,6 +19,7 @@ Myrtea lets you:
 | [Engine API](https://github.com/myrteametrics/myrtea-engine-api) | Go 1.26+ | 9000 |
 | [Ingester API](https://github.com/myrteametrics/myrtea-ingester-api) | Go 1.24+ | 9001 |
 | [SDK](https://github.com/myrteametrics/myrtea-sdk) | Go 1.25+ | — |
+| [Settings webapp](https://github.com/myrteametrics/myrtea-webapp-settings) | Angular 21 | 4200 (dev) |
 | Elasticsearch | 7.17+ or 8.x | 9200, 9300 |
 | PostgreSQL | 10+ (16 recommended) | 5432 |
 
@@ -27,6 +28,7 @@ Myrtea lets you:
 - [Architecture overview](architecture/architecture.md)
 - [Installation guide](getting-started/installation.md)
 - [First application walkthrough](getting-started/first-application.md)
+- [Settings webapp overview](webapp/overview.md)
 - [Engine API configuration reference](technical/engine/configuration.md)
 - [Ingester API configuration reference](technical/ingester/configuration.md)
 - [Security & authentication](security/general.md)
@@ -38,4 +40,5 @@ Myrtea lets you:
 | [myrtea-engine-api](https://github.com/myrteametrics/myrtea-engine-api) | Main REST API — models, facts, situations, rules, scheduler |
 | [myrtea-ingester-api](https://github.com/myrteametrics/myrtea-ingester-api) | Data ingestion API — writes to Elasticsearch with merge rules |
 | [myrtea-sdk](https://github.com/myrteametrics/myrtea-sdk) | Shared Go library used by all Myrtea services |
+| [myrtea-webapp-settings](https://github.com/myrteametrics/myrtea-webapp-settings) | Angular 21 settings frontend — business, technical & administration configuration UI |
 | [myrtea-docs](https://github.com/myrteametrics/myrtea-docs) | This documentation |
