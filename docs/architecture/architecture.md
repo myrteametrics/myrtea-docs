@@ -5,6 +5,12 @@
 Myrtea is composed of several components that work together to collect, process, and expose business KPIs.
 
 ```
+ ┌─────────────────────────────┐
+ │   Settings Webapp (Angular) │
+ │  myrtea-webapp-settings     │
+ └──────────────┬──────────────┘
+                │ REST /api/v5
+                ▼
 External Data Sources (Kafka, SQL, custom)
         │
         ▼
@@ -30,11 +36,12 @@ External Data Sources (Kafka, SQL, custom)
 
 ## Internal components
 
-| Component    | Ownership | Technology         | Default exposed port |
-|--------------|-----------|--------------------|----------------------|
-| Engine-API   | Internal  | Go 1.26+           | 9000                 |
-| Ingester-API | Internal  | Go 1.24+           | 9001                 |
-| Connectors   | Internal  | Multiple (Go, ...) | N/A                  |
+| Component       | Ownership | Technology         | Default exposed port |
+|-----------------|-----------|--------------------|----------------------|
+| Engine-API      | Internal  | Go 1.26+           | 9000                 |
+| Ingester-API    | Internal  | Go 1.24+           | 9001                 |
+| Connectors      | Internal  | Multiple (Go, ...) | N/A                  |
+| Settings Webapp | Internal  | Angular 21         | 4200 (dev)           |
 
 ## Internal or Provided components
 

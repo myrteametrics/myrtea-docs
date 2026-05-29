@@ -96,6 +96,11 @@ nav:
   # - Auth:
   #   - Basic: security/auth/basic.md
   #   - SAML: security/auth/saml.md
+  - Web Application:
+    - Overview: webapp/overview.md
+    - Business Settings: webapp/business-settings.md
+    - Technical Settings: webapp/technical-settings.md
+    - Administration: webapp/administration.md
   - Troubleshooting: troubleshooting/troubleshooting.md
   - Changelog: CHANGELOG.md
   # - Development Guide:
