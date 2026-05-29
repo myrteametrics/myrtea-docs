@@ -83,6 +83,8 @@ nav:
   - Technical:
     - APIs:
       - Ingester API: technical/ingester/ingester.md
+      - Ingester API Configuration: technical/ingester/configuration.md
+      - Engine API Configuration: technical/engine/configuration.md
     - Postgres:
       - Installation: technical/postgres/postgres.md
     - Connectors:
@@ -95,6 +97,7 @@ nav:
   #   - Basic: security/auth/basic.md
   #   - SAML: security/auth/saml.md
   - Troubleshooting: troubleshooting/troubleshooting.md
+  - Changelog: CHANGELOG.md
   # - Development Guide:
   #   - Stack starting: development/stack-starting.md
   #   - Angular development guide:

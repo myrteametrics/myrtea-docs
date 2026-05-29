@@ -1,6 +1,165 @@
 # Ingester API
 
-## A closer look on how it works
+## Overview
+
+The Ingester API (`myrtea-ingester-api`) is a dedicated component that abstracts data ingestion into Elasticsearch. It supports advanced document-merge rules applied during ingestion.
+
+- Default port: **9001**
+- API base path: `/api/v5`
+- Swagger UI: `http://localhost:9001/swagger/index.html`
+- Source: [github.com/myrteametrics/myrtea-ingester-api](https://github.com/myrteametrics/myrtea-ingester-api)
+
+## How it works
+
+1. The Ingester API starts an HTTP server listening on a single route: `POST /api/v5/ingester/data`.
+2. Each incoming request must contain a `BulkIngestRequest` (see below).
+3. The request is forwarded to the `BulkIngester`, which finds (or creates) a `TypedIngester` for the document type.
+4. Each `TypedIngester` has a configurable number of workers (`INGESTER_MAXIMUM_WORKERS`).
+5. The `BulkIngester` iterates through all documents and sends each to the appropriate `TypedIngester` via a channel.
+6. The `TypedIngester` hashes each document by UUID and routes it to a worker.
+7. Each worker accumulates documents in a buffer. When the buffer reaches `WORKER_MAXIMUM_BUFFER_SIZE` (or `WORKER_FORCE_FLUSH_TIMEOUT_SEC` elapses), the batch is sent to Elasticsearch.
+
+## Ingester data format
+
+!!! info
+    The only supported input format is **JSON**.
+
+## API endpoint
+
+```
+POST /api/v5/ingester/data
+```
+
+## BulkIngestRequest structure
+
+```go
+type BulkIngestRequest struct {
+    UUID         string     `json:"uuid"`
+    DocumentType string     `json:"documentType"`
+    MergeConfig  []Config   `json:"merge"`
+    Docs         []Document `json:"docs"`
+}
+```
+
+## Document structure
+
+```go
+type Document struct {
+    ID        string      `json:"id"`
+    Index     string      `json:"index"`
+    IndexType string      `json:"type"`
+    Source    interface{} `json:"source"` // Most of the time a map[string]interface{}
+}
+```
+
+## Merge config structure
+
+```go
+// Config wraps all rules for document merging
+type Config struct {
+    Mode             Mode    `json:"mode"`
+    ExistingAsMaster bool    `json:"existingAsMaster"`
+    Type             string  `json:"type,omitempty"`
+    LinkKey          string  `json:"linkKey,omitempty"`
+    Groups           []Group `json:"groups,omitempty"`
+}
+
+// Mode constants
+const (
+    Self      Mode = 1
+    EnrichTo  Mode = 2
+    EnrichFrom Mode = 3
+)
+```
+
+## Merge config group structure
+
+```go
+// Group allows grouping a set of merge fields with an optional condition
+type Group struct {
+    Condition             string      `json:"condition,omitempty"`
+    FieldReplace          []string    `json:"fieldReplace,omitempty"`
+    FieldReplaceIfMissing []string    `json:"fieldReplaceIfMissing,omitempty"`
+    FieldMerge            []string    `json:"fieldMerge,omitempty"`
+    FieldKeepLatest       []string    `json:"fieldKeepLatest,omitempty"`
+    FieldKeepEarliest     []string    `json:"fieldKeepEarliest,omitempty"`
+    FieldMath             []FieldMath `json:"fieldMath,omitempty"`
+}
+
+// FieldMath specifies a merge rule using a math expression
+type FieldMath struct {
+    Expression  string `json:"expression"`
+    OutputField string `json:"outputField"`
+}
+```
+
+## Examples
+
+### Ingest new documents
+
+```sh
+curl -s -X POST http://localhost:9001/api/v5/ingester/data \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "uuid": "batch-001",
+    "documentType": "project",
+    "merge": [
+      {"mode": 1, "type": "project"}
+    ],
+    "docs": [
+      {"id": "1", "index": "project", "source": {"id": "project-1", "label": "A"}},
+      {"id": "2", "index": "project", "source": {"id": "project-2", "label": "B"}},
+      {"id": "3", "index": "project", "source": {"id": "project-3", "label": "C"}}
+    ]
+  }'
+```
+
+### Update existing documents (replace a field)
+
+```sh
+curl -s -X POST http://localhost:9001/api/v5/ingester/data \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "uuid": "batch-002",
+    "documentType": "project",
+    "merge": [
+      {
+        "mode": 1,
+        "type": "project",
+        "groups": [
+          {
+            "condition": "true",
+            "fieldReplace": ["label"],
+            "fieldReplaceIfMissing": ["new_field"]
+          }
+        ]
+      }
+    ],
+    "docs": [
+      {"id": "2", "index": "project", "source": {"id": "project-2", "label": "New Label"}},
+      {"id": "3", "index": "project", "source": {"id": "project-3", "new_field": "new field value"}}
+    ]
+  }'
+```
+
+## Merge configuration
+
+General rules:
+
+* If the existing document is missing, no merge config is applied — the new document is sent as-is.
+* If a referenced field is missing in a function (e.g. `calendar_delay(...)`, `calendar_add(...)`), the function is skipped.
+
+| Existing Doc<br>(in Elasticsearch) | FieldReplace `["a"]`<br>ExistingAsMaster = TRUE | FieldReplaceIfMissing `["a"]`<br>ExistingAsMaster = TRUE | FieldReplace `["a"]`<br>ExistingAsMaster = FALSE | FieldReplaceIfMissing `["a"]`<br>ExistingAsMaster = FALSE |
+|------------------------------------|------------------------------------------------|-----------------------------------------------------|--------------------------------------------------|------------------------------------------------------|
+| nil                                | a = 30, b = 50                                 | a = 30, b = 50                                      | a = 30, b = 50                                   | a = 30, b = 50                                       |
+| a = 1, b = 2                       | **a = 30**, b = 2                              | a = 1, b = 2                                        | **a = 1**, b = 50                                | a = 30, b = 50                                       |
+| b = 2                              | **a = 30**, b = 2                              | **a = 30**, b = 2                                   | a = 30, b = 50                                   | a = 30, b = 50                                       |
+
+_New document in all rows above: `{a: 30, b: 50}`_
+
+## Configuration reference
+
+See [Ingester API configuration reference](configuration.md).
 
 1. The application initiates an HTTP server that listens to a single route: /ingester/data.
 2. Upon receiving an HTTP request, the ingester waits for a specific request called BulkIngestRequest.
